@@ -20,7 +20,7 @@ public class BowlingScoreFrame {
         this.rollScore2 = rollScore2;
         assertRollScoreRange(this.rollScore2);
 
-        this.rollScore = rollScore1 + rollScore2;
+        this.rollScore = this.rollScore1 + this.rollScore2;
         assertRollScoreRange(this.rollScore);
     }
 

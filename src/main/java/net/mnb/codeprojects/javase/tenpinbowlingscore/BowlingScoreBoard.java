@@ -28,12 +28,29 @@ public class BowlingScoreBoard {
     }
 
     private void initFrames(String[] rollScores) {
-        int[] fullRollScores = IntStream.range(0, MAX_ROLL_COUNT)
-                .map(i -> i >= rollScores.length ? 0 : Integer.parseInt(rollScores[i].trim()))
-                .toArray();
+        List<Integer> fullRollScores = new LinkedList<>();
+        try {
+            IntStream.range(0, MAX_ROLL_COUNT)
+                    .mapToObj(i -> i >= rollScores.length ? "0" : rollScores[i].trim())
+                    .map(Integer::parseInt)
+                    .forEach(n -> {
+                        fullRollScores.add(n);
+                        if (n == BowlingScoreFrame.MAX_ROLL_SCORE) {
+                            fullRollScores.add(0);
+                        }
+                    });
 
-        for (int i = 0; i < MAX_FRAME_WITH_BONUS_COUNT; i++) {
-            scoreFrames.add(new BowlingScoreFrame(fullRollScores[i], fullRollScores[i + 1]));
+        } catch (NumberFormatException e) {
+            throw new BoardValidationException("Non numeric string detected! All scores must be numeric");
+        }
+
+//        IntStream.iterate(0, i -> i + 2)
+//                .limit(MAX_ROLL_COUNT)
+//                .mapToObj(i -> new BowlingScoreFrame(fullRollScores.get(i), fullRollScores.get(i + 1)))
+//                .forEach(f -> scoreFrames.add(f));
+
+        for (int i = 0; i < MAX_ROLL_COUNT; i += 2) {
+            scoreFrames.add(new BowlingScoreFrame(fullRollScores.get(i), fullRollScores.get(i + 1)));
         }
 
         scoreFrames.add(0, new BowlingScoreFrame(0, 0)); // seed frame
