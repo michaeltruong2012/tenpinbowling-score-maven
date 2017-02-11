@@ -29,4 +29,11 @@ public class BowlingScoreBoardVerifyingInstantiationTest {
     public void shouldRaiseErrorWhenMoreThan24RollsAreMade() throws Exception {
     }
 
+    @Test(expected = BoardValidationException.class)
+    public void shouldRaiseErrorWhenRollScoreIsNotNumeric() throws Exception {
+    }
+
+    @Test(expected = BoardValidationException.class)
+    public void shouldRaiseErrorWhenRollScoreIsOutOfRange() throws Exception {
+    }
 }
