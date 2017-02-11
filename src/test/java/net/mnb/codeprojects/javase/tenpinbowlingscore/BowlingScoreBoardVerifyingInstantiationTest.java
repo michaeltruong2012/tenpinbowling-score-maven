@@ -56,11 +56,11 @@ public class BowlingScoreBoardVerifyingInstantiationTest {
 
     @Test(expected = BoardValidationException.class)
     public void shouldRaiseErrorWhenRollScoreIsNotNumeric() throws Exception {
-        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"9", "1", "3", "a", "10", "2", "8"});
+        new BowlingScoreBoard(new String[]{"9", "1", "3", "a", "10", "2", "8"});
     }
 
     @Test(expected = BoardValidationException.class)
     public void shouldRaiseErrorWhenRollScoreIsOutOfRange() throws Exception {
-        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"9", "1", "3", "12", "10", "2", "8"});
+        new BowlingScoreBoard(new String[]{"9", "1", "3", "12", "10", "2", "8"});
     }
 }
