@@ -11,11 +11,12 @@ If a final score cannot be determined from the input then method should return t
 Include unit tests and post code to a publicly accessible code repository.
 
 Example inputs and outputs
-- "1 2 3 4" -> 10
-- "9 1 9 1" -> 29
-- "1 1 1 1 10 1 1" -> 18
-- "10 10 10 10 10 10 10 10 10 10 10 10" -> 300
-
+```
+"1 2 3 4" -> 10
+"9 1 9 1" -> 29
+"1 1 1 1 10 1 1" -> 18
+"10 10 10 10 10 10 10 10 10 10 10 10" -> 300
+```
 ## Technical requirements
 
 - The code works (we will be going beyond the 4 examples bowls provided)
@@ -38,10 +39,14 @@ To verify the scores, refer to the website http://bit.ly/2kVCSTk.
 # Build and run
 
 To build and execute all tests with Maven 3, invoke:
-
+```
 mvn clean install
-
+```
 To run the application in CLI, invoke:
-
-mvn exec:java -Dexec.args={arguments}
-
+```
+mvn exec:java -Dexec.args=" \"{arguments}\" "
+```
+For example, to run with argument "1 2 3 4", the command must be:
+```
+mvn exec:java -Dexec.args=" \"1 2 3 4\" "
+```
