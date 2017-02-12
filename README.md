@@ -17,6 +17,7 @@ Example inputs and outputs
 - "10 10 10 10 10 10 10 10 10 10 10 10" -> 300
 
 ## Technical requirements
+
 - The code works (we will be going beyond the 4 examples bowls provided)
 - It's tested (We will be looking at the extensiveness of their testing)
 - Classes and methods are logically structured (please make it as easy to understand the code as possible) (Comments may be useful but we don't judge on this)
@@ -30,4 +31,17 @@ Also:
 - Appropriate use of access modifiers
 - Superfluous code (Code which adds or does nothing for the solution is not desired)
 
-# To verify the scores, refer to the website http://bit.ly/2kVCSTk.
+# Reference game simulation
+
+To verify the scores, refer to the website http://bit.ly/2kVCSTk.
+
+# Build and run
+
+To build and execute all tests with Maven 3, invoke:
+
+mvn clean install
+
+To run the application in CLI, invoke:
+
+mvn exec:java -Dexec.args={arguments}
+
