@@ -5,15 +5,15 @@ import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.BoardValidation
 /**
  * @author Michael Truong
  */
-public class BowlingScoreFrame {
-    public static final int MAX_ROLL_SCORE = 10;
+class BowlingScoreFrame {
+    private static final int MAX_ROLL_SCORE = 10;
 
     private int rollScore1;
     private int rollScore2;
     private int rollScore;
     private int frameScore;
 
-    public BowlingScoreFrame(int rollScore1, int rollScore2) {
+    BowlingScoreFrame(int rollScore1, int rollScore2) {
         this.rollScore1 = rollScore1;
         assertRollScoreRange(this.rollScore1);
 
@@ -24,31 +24,31 @@ public class BowlingScoreFrame {
         assertRollScoreRange(this.rollScore);
     }
 
-    public boolean isStrike() {
-        return rollScore1 == MAX_ROLL_SCORE;
+    boolean isStrike() {
+        return isMaxScore(rollScore1);
     }
 
-    public boolean isSpare() {
-        return !isStrike() && rollScore == MAX_ROLL_SCORE;
+    boolean isSpare() {
+        return !isStrike() && isMaxScore(rollScore);
     }
 
-    public int getRollScore1() {
+    int getRollScore1() {
         return rollScore1;
     }
 
-    public int getRollScore2() {
+    int getRollScore2() {
         return rollScore2;
     }
 
-    public int getRollScore() {
+    int getRollScore() {
         return rollScore;
     }
 
-    public int getFrameScore() {
+    int getFrameScore() {
         return frameScore;
     }
 
-    public void setFrameScore(int frameScore) {
+    void setFrameScore(int frameScore) {
         this.frameScore = frameScore;
     }
 
@@ -57,5 +57,9 @@ public class BowlingScoreFrame {
             throw new BoardValidationException(
                     "Roll scores contain invalid score (value: {0}). Scores must be between 0 and 10", score);
         }
+    }
+
+    static boolean isMaxScore(Integer score) {
+        return score == MAX_ROLL_SCORE;
     }
 }

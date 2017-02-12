@@ -6,17 +6,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static net.mnb.codeprojects.javase.tenpinbowlingscore.BowlingScoreFrame.isMaxScore;
+
 /**
  * @author Michael Truong
  */
-public class BowlingScoreBoard {
+class BowlingScoreBoard {
     private static final int MAX_FRAME_COUNT = 10;
     private static final int MAX_FRAME_WITH_BONUS_COUNT = MAX_FRAME_COUNT + 2;
     private static final int MAX_ROLL_COUNT = MAX_FRAME_WITH_BONUS_COUNT * 2;
 
     private List<BowlingScoreFrame> scoreFrames = new LinkedList<>();
 
-    public BowlingScoreBoard(String[] rollScores) {
+    BowlingScoreBoard(String[] rollScores) {
         ensureValidRollScores(rollScores);
         initFrames(rollScores);
     }
@@ -35,7 +37,7 @@ public class BowlingScoreBoard {
                     .map(Integer::parseInt)
                     .forEach(n -> {
                         fullRollScores.add(n);
-                        if (n == BowlingScoreFrame.MAX_ROLL_SCORE) {
+                        if (isMaxScore(n)) {
                             fullRollScores.add(0);
                         }
                     });
@@ -44,21 +46,23 @@ public class BowlingScoreBoard {
             throw new BoardValidationException("Non numeric string detected! All scores must be numeric");
         }
 
-//        IntStream.iterate(0, i -> i + 2)
-//                .limit(MAX_ROLL_COUNT)
-//                .mapToObj(i -> new BowlingScoreFrame(fullRollScores.get(i), fullRollScores.get(i + 1)))
-//                .forEach(f -> scoreFrames.add(f));
+        addFramesFromFullRollScores(fullRollScores);
+        addSeedFrame();
+    }
 
-        for (int i = 0; i < MAX_ROLL_COUNT; i += 2) {
-            scoreFrames.add(new BowlingScoreFrame(fullRollScores.get(i), fullRollScores.get(i + 1)));
-        }
-
+    private void addSeedFrame() {
         scoreFrames.add(0, new BowlingScoreFrame(0, 0)); // seed frame
     }
 
-    public int calculateFrameScores() {
+    private void addFramesFromFullRollScores(List<Integer> fullRollScores) {
+        for (int i = 0; i < MAX_ROLL_COUNT; i += 2) {
+            scoreFrames.add(new BowlingScoreFrame(fullRollScores.get(i), fullRollScores.get(i + 1)));
+        }
+    }
+
+    int calculateFrameScores() {
         int totalScore = 0;
-        for (int i = 1; i <= BowlingScoreBoard.MAX_FRAME_COUNT; i++) {
+        for (int i = 1; i <= MAX_FRAME_COUNT; i++) {
             BowlingScoreFrame currentFrame = scoreFrames.get(i);
             BowlingScoreFrame previousFrame = scoreFrames.get(i - 1);
             BowlingScoreFrame nextFrame = scoreFrames.get(i + 1);

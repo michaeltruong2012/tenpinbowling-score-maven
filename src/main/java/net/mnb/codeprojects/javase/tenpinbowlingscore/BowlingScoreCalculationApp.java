@@ -19,8 +19,10 @@ public class BowlingScoreCalculationApp {
     public static void main(String[] args) {
         try {
             BowlingScoreInputParser.parse(args)
-                    .map(BowlingScoreBoard::calculateFrameScores)
-                    .ifPresent(System.out::println);
+                    .ifPresent(board -> {
+                        int totalScore = board.calculateFrameScores();
+                        System.out.println("Final score: " + totalScore);
+                    });
 
         } catch (BoardValidationException e) {
             System.err.println(e.getMessage());
