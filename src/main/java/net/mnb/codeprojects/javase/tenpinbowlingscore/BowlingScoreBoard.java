@@ -2,9 +2,9 @@ package net.mnb.codeprojects.javase.tenpinbowlingscore;
 
 import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.BoardValidationException;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static net.mnb.codeprojects.javase.tenpinbowlingscore.BowlingScoreFrame.isMaxScore;
 
@@ -21,6 +21,9 @@ class BowlingScoreBoard {
     BowlingScoreBoard(String[] rollScores) {
         ensureValidRollScores(rollScores);
         initFrames(rollScores);
+
+        System.out.println("INFO: Bowling board");
+        scoreFrames.stream().forEach(f -> System.out.println("INFO: " + f));
     }
 
     private void ensureValidRollScores(String[] rollScores) {
@@ -30,34 +33,35 @@ class BowlingScoreBoard {
     }
 
     private void initFrames(String[] rollScores) {
-        List<Integer> fullRollScores = new LinkedList<>();
+        addSeedFrame();
+
         try {
-            IntStream.range(0, MAX_ROLL_COUNT)
-                    .mapToObj(i -> i >= rollScores.length ? "0" : rollScores[i].trim())
-                    .map(Integer::parseInt)
-                    .forEach(score -> {
-                        fullRollScores.add(score);
-                        if (isMaxScore(score)) {
-                            fullRollScores.add(0);
-                        }
-                    });
+            String[] fullRollScores = Arrays.copyOf(rollScores, MAX_ROLL_COUNT);
+            Arrays.stream(fullRollScores)
+                    .map(s -> s == null ? "0" : s.trim())
+                    .mapToInt(Integer::parseInt)
+                    .forEach(this::completeOrAddFrame);
 
         } catch (NumberFormatException e) {
             throw new BoardValidationException("Non numeric string detected! All scores must be numeric");
         }
+    }
 
-        addFramesFromFullRollScores(fullRollScores);
-        addSeedFrame();
+    private void completeOrAddFrame(int score) {
+        BowlingScoreFrame lastFrame = scoreFrames.get(scoreFrames.size() - 1);
+        if (lastFrame.hasAllScores()) {
+            if (isMaxScore(score)) {
+                scoreFrames.add(BowlingScoreFrame.newStrike());
+            } else {
+                scoreFrames.add(new BowlingScoreFrame(score));
+            }
+        } else {
+            lastFrame.setRollScore2(score);
+        }
     }
 
     private void addSeedFrame() {
-        scoreFrames.add(0, new BowlingScoreFrame(0, 0)); // seed frame
-    }
-
-    private void addFramesFromFullRollScores(List<Integer> fullRollScores) {
-        for (int i = 0; i < MAX_ROLL_COUNT; i += 2) {
-            scoreFrames.add(new BowlingScoreFrame(fullRollScores.get(i), fullRollScores.get(i + 1)));
-        }
+        scoreFrames.add(new BowlingScoreFrame(0, 0)); // seed frame
     }
 
     int calculateFrameScores() {

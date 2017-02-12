@@ -1,6 +1,5 @@
 package net.mnb.codeprojects.javase.tenpinbowlingscore;
 
-import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.GameRuleViolationException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -55,16 +54,9 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
     @Test
     public void shouldReturnScoreForGameWithOneSpareAtTheLastFrame() throws Exception {
         BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
-                "2", "4",
-                "8", "1",
-                "3", "3",
-                "5", "5",
-                "8", "2",
-                "0", "0",
-                "0", "0",
-                "0", "0",
-                "0", "0",
-                "9", "1",
+                "2", "4", "8", "1", "3", "3", "5", "5", "8", "2",
+                "0", "0", "0", "0", "0", "0", "0", "0",
+                "9", "1", // spare
                 "8"
         });
 
@@ -73,23 +65,46 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
         assertEquals(67, finalScore);
     }
 
-    @Test(expected = GameRuleViolationException.class)
-    public void shouldRaiseErrorWhenGameHasOneSpareAtTheLastFrameButNoBonusRoll() throws Exception {
+    @Test
+    public void shouldReturnScoreForGameWithOneSpareAtTheLastFrameAndOneStrikeBonus() throws Exception {
         BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
-                "2", "4",
-                "8", "1",
-                "3", "3",
-                "5", "5",
-                "8", "2",
-                "0", "0",
-                "0", "0",
-                "0", "0",
-                "0", "0",
+                "2", "4", "8", "1", "3", "3", "5", "5", "8", "2",
+                "0", "0", "0", "0", "0", "0", "0", "0",
                 "9", "1", // spare
-                // "8" <= this bonus roll is not made
+                "10" // strike
         });
 
-        board.calculateFrameScores();
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(69, finalScore);
+    }
+
+    @Test
+    public void shouldReturnScoreWhenGameHasOneSpareAtTheLastFrameButNoBonusRollExists() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "2", "4", "8", "1", "3", "3", "5", "5", "8", "2",
+                "0", "0", "0", "0", "0", "0", "0", "0",
+                "9", "1" // spare
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(59, finalScore);
+    }
+
+    @Test
+    public void shouldIgnoreRedundantBonusRollWhenGameHasOneSpareAtTheLastFrameButTwoBonusRollsExist() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "2", "4", "8", "1", "3", "3", "5", "5", "8", "2",
+                "0", "0", "0", "0", "0", "0", "0", "0",
+                "9", "1", // spare
+                "8",
+                "1" // redundant bonus
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(67, finalScore);
     }
 
     // -------------------------------------------------
@@ -104,4 +119,90 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
 
         assertEquals(18, finalScore);
     }
+
+    @Test
+    public void shouldReturnScoreForGameWithOneStrikeInTheLastFrameAndStrikeBonus() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "1", "5",
+                "5", "3",
+                "2", "3",
+                "4", "3",
+                "2", "4",
+                "6", "4",
+                "1", "3",
+                "3", "5",
+                "10", // strike at frame 9
+                "10", // strike at frame 10
+                "10", // bonus (strike)
+                "10" // bonus (strike)
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(115, finalScore);
+    }
+
+    @Test
+    public void shouldReturnScoreForGameWithOneStrikeInTheLastFrameButNoStrikeOrSpareBonus() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "1", "5",
+                "5", "3",
+                "2", "3",
+                "4", "3",
+                "2", "4",
+                "6", "4",
+                "1", "3",
+                "3", "5",
+                "0", "10", // spare at frame 9
+                "10", // strike at frame 10
+                "8", "1" // bonus
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(94, finalScore);
+    }
+
+    @Test
+    public void shouldReturnScoreForGameWithOneStrikeInTheLastFrameAndSpareBonus() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "1", "5",
+                "5", "3",
+                "2", "3",
+                "4", "3",
+                "2", "4",
+                "6", "4",
+                "1", "3",
+                "3", "5",
+                "0", "10", // spare at frame 9
+                "10", // strike at frame 10
+                "8", "2" // bonus (spare)
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(95, finalScore);
+    }
+
+    @Test
+    public void shouldReturnScoreForGameWithOneStrikeInTheLastFrameAndZeroBonus() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "1", "5",
+                "5", "3",
+                "2", "3",
+                "4", "3",
+                "2", "4",
+                "6", "4",
+                "1", "3",
+                "3", "5",
+                "10", // strike at frame 9
+                "10", // strike at frame 10
+                "0", "0" // 0-bonus
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(85, finalScore);
+    }
+
 }

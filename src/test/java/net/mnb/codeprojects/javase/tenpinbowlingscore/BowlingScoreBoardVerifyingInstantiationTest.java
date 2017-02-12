@@ -27,10 +27,12 @@ public class BowlingScoreBoardVerifyingInstantiationTest {
 
     @Test
     public void shouldInitUndefinedFramesAsZeroScoreFrames() throws Exception {
+        int expectedDefinedFrameCount = 4;
+
         BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"1", "1", "1", "1", "10", "1", "1"});
 
         long zeroFrameCount = board.getScoreFrames().stream().filter(f -> f.getRollScore() == 0).count();
-        assertEquals((13L - 4), zeroFrameCount);
+        assertEquals(board.getScoreFrames().size() - expectedDefinedFrameCount, zeroFrameCount);
     }
 
     @Test

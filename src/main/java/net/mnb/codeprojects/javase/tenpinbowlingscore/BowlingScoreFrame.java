@@ -8,20 +8,23 @@ import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.BoardValidation
 class BowlingScoreFrame {
     private static final int MAX_ROLL_SCORE = 10;
 
-    private int rollScore1;
-    private int rollScore2;
-    private int rollScore;
-    private int frameScore;
+    private int rollScore1 = -1;
+    private int rollScore2 = -1;
+    private int rollScore = 0;
+    private int frameScore = 0;
 
-    BowlingScoreFrame(int rollScore1, int rollScore2) {
+    BowlingScoreFrame(int rollScore1) {
         this.rollScore1 = rollScore1;
         assertRollScoreRange(this.rollScore1);
+    }
 
-        this.rollScore2 = rollScore2;
-        assertRollScoreRange(this.rollScore2);
+    BowlingScoreFrame(int rollScore1, int rollScore2) {
+        this(rollScore1);
+        setRollScore2(rollScore2);
+    }
 
-        this.rollScore = this.rollScore1 + this.rollScore2;
-        assertRollScoreRange(this.rollScore);
+    static BowlingScoreFrame newStrike() {
+        return new BowlingScoreFrame(10, 0);
     }
 
     boolean isStrike() {
@@ -40,8 +43,11 @@ class BowlingScoreFrame {
         return rollScore2;
     }
 
-    int getRollScore() {
-        return rollScore;
+    void setRollScore2(int rollScore2) {
+        this.rollScore2 = rollScore2;
+        assertRollScoreRange(this.rollScore2);
+
+        updateRollScore();
     }
 
     int getFrameScore() {
@@ -50,6 +56,19 @@ class BowlingScoreFrame {
 
     void setFrameScore(int frameScore) {
         this.frameScore = frameScore;
+    }
+
+    boolean hasAllScores() {
+        return rollScore1 >= 0 && rollScore2 >= 0;
+    }
+
+    int getRollScore() {
+        return rollScore;
+    }
+
+    private void updateRollScore() {
+        this.rollScore = this.rollScore1 + this.rollScore2;
+        assertRollScoreRange(this.rollScore);
     }
 
     private static void assertRollScoreRange(int score) {
@@ -61,5 +80,16 @@ class BowlingScoreFrame {
 
     static boolean isMaxScore(Integer score) {
         return score == MAX_ROLL_SCORE;
+    }
+
+    @Override
+    public String toString() {
+        return "Frame [" +
+                "r1=" + rollScore1 +
+                ", r2=" + rollScore2 +
+                ", score=" + rollScore +
+                ", strike/spare?=" + (isStrike() ? "strike" : (isSpare() ? "spare" : "N/A")) +
+                ", frameScore=" + frameScore +
+                ']';
     }
 }
