@@ -1,7 +1,5 @@
 package net.mnb.codeprojects.javase.tenpinbowlingscore;
 
-import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.BoardValidationException;
-
 /**
  * The main application which calculates the final score of a ten-pin bowling game.
  * The scoring rules can be found in the <a href="http://www.bowling2u.com/trivia/game/scoring.asp">Scoring</a> page.
@@ -17,16 +15,15 @@ import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.BoardValidation
 public class BowlingScoreCalculationApp {
 
     public static void main(String[] args) {
-        try {
-            BowlingScoreInputParser.parse(args)
-                    .ifPresent(board -> {
-                        int totalScore = board.calculateFrameScores();
-                        System.out.println("Final score: " + totalScore);
-                    });
+        int totalScore = doCalculate(args);
+        System.out.println("Final score: " + totalScore);
+    }
 
-        } catch (BoardValidationException e) {
-            System.err.println(e.getMessage());
-        }
+    static int doCalculate(String[] args) {
+        return BowlingScoreInputParser
+                .parse(args)
+                .map(BowlingScoreBoard::calculateFrameScores)
+                .orElse(0);
     }
 }
 

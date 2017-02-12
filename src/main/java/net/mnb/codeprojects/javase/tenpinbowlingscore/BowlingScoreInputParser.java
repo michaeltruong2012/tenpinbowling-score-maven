@@ -29,7 +29,7 @@ class BowlingScoreInputParser {
         rollScores = Arrays.stream(rollScores)
                 .filter(s -> s != null && !s.isEmpty())
                 .toArray(String[]::new);
-        System.out.println("INFO: The actual input argument is " + Arrays.toString(rollScores));
+        System.out.println("INFO: Input roll scores are " + Arrays.toString(rollScores));
 
         return rollScores;
     }

@@ -21,9 +21,8 @@ class BowlingScoreBoard {
     BowlingScoreBoard(String[] rollScores) {
         ensureValidRollScores(rollScores);
         initFrames(rollScores);
-
-        System.out.println("INFO: Bowling board");
-        scoreFrames.stream().forEach(f -> System.out.println("INFO: " + f));
+//        System.out.println("INFO: Bowling board");
+//        scoreFrames.stream().forEach(f -> System.out.println("INFO: " + f));
     }
 
     private void ensureValidRollScores(String[] rollScores) {
