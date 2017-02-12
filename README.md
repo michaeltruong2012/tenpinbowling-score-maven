@@ -29,3 +29,5 @@ Also:
 - Separation of concerns
 - Appropriate use of access modifiers
 - Superfluous code (Code which adds or does nothing for the solution is not desired)
+
+# To verify the scores, refer to the website http://bit.ly/2kVCSTk.

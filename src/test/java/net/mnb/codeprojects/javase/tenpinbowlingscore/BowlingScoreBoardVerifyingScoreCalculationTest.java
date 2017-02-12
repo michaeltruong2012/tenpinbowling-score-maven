@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Expected results are retrieved from the online bowling game score website <a href="http://bit.ly/2kVCSTk">here</a>.
+ */
 public class BowlingScoreBoardVerifyingScoreCalculationTest {
 
     @Test
@@ -16,7 +19,16 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
     }
 
     @Test
-    public void shouldReturn10ForRollScores_1_2_3_4() throws Exception {
+    public void shouldReturn0ForWorstGame() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"0", "0", "0", "0", "0", "0", "0", "0", "0", "0"});
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(0, finalScore);
+    }
+
+    @Test
+    public void shouldReturnScoreForGameWithoutStrikeOrSpare() throws Exception {
         BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"1", "2", "3", "4"});
 
         int finalScore = board.calculateFrameScores();
@@ -24,8 +36,12 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
         assertEquals(10, finalScore);
     }
 
+    // -------------------------------------------------
+    // tests for games with spares
+    // -------------------------------------------------
+
     @Test
-    public void shouldReturn29ForRollScores_9_1_9_1() throws Exception {
+    public void shouldReturnScoreForGameWithOneSpareBeforeTheLastFrame() throws Exception {
         BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"9", "1", "9", "1"});
 
         int finalScore = board.calculateFrameScores();
@@ -34,7 +50,32 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
     }
 
     @Test
-    public void shouldReturn18ForRollScores_1_1_1_1_10_1_1() throws Exception {
+    public void shouldReturnScoreForGameWithOneSpareAtTheLastFrame() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "2", "4",
+                "8", "1",
+                "3", "3",
+                "5", "5",
+                "8", "2",
+                "0", "0",
+                "0", "0",
+                "0", "0",
+                "0", "0",
+                "9", "1",
+                "8"
+        });
+
+        int finalScore = board.calculateFrameScores();
+
+        assertEquals(29, finalScore);
+    }
+
+    // -------------------------------------------------
+    // tests for games with strikes
+    // -------------------------------------------------
+
+    @Test
+    public void shouldReturnScoreForGameWithOneStrikeBeforeTheLastFrame() throws Exception {
         BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"1", "1", "1", "1", "10", "1", "1"});
 
         int finalScore = board.calculateFrameScores();
