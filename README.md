@@ -2,6 +2,17 @@
 
 This is a code exercise.
 
+## Prerequisites
+
+### Runtime
+- JDK 8
+- Maven 3+
+
+### IDE
+(Only choose one)
+- IntelliJ IDEA 14+ (Choose .iml file or import pom.xml)
+- Eclipse (import pom.xml)
+
 ## Functional requirements
 
 Write a java application that takes a string of space separated numbers from 0 to 10 and calculates what that would be as a score in ten pin bowling (hints on how to score in bowling are here: http://www.bowling2u.com/trivia/game/scoring.asp).  
