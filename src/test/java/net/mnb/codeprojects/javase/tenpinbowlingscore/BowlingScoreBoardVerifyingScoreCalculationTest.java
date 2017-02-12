@@ -1,5 +1,6 @@
 package net.mnb.codeprojects.javase.tenpinbowlingscore;
 
+import net.mnb.codeprojects.javase.tenpinbowlingscore.exceptions.GameRuleViolationException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +12,8 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
 
     @Test
     public void shouldReturn300ForPerfectGame() throws Exception {
-        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10"});
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10"});
 
         int finalScore = board.calculateFrameScores();
 
@@ -20,7 +22,8 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
 
     @Test
     public void shouldReturn0ForWorstGame() throws Exception {
-        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{"0", "0", "0", "0", "0", "0", "0", "0", "0", "0"});
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"});
 
         int finalScore = board.calculateFrameScores();
 
@@ -67,7 +70,26 @@ public class BowlingScoreBoardVerifyingScoreCalculationTest {
 
         int finalScore = board.calculateFrameScores();
 
-        assertEquals(29, finalScore);
+        assertEquals(67, finalScore);
+    }
+
+    @Test(expected = GameRuleViolationException.class)
+    public void shouldRaiseErrorWhenGameHasOneSpareAtTheLastFrameButNoBonusRoll() throws Exception {
+        BowlingScoreBoard board = new BowlingScoreBoard(new String[]{
+                "2", "4",
+                "8", "1",
+                "3", "3",
+                "5", "5",
+                "8", "2",
+                "0", "0",
+                "0", "0",
+                "0", "0",
+                "0", "0",
+                "9", "1", // spare
+                // "8" <= this bonus roll is not made
+        });
+
+        board.calculateFrameScores();
     }
 
     // -------------------------------------------------

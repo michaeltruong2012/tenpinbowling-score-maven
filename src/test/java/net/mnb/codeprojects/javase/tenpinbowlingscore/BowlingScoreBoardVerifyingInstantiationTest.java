@@ -63,4 +63,14 @@ public class BowlingScoreBoardVerifyingInstantiationTest {
     public void shouldRaiseErrorWhenRollScoreIsOutOfRange() throws Exception {
         new BowlingScoreBoard(new String[]{"9", "1", "3", "12", "10", "2", "8"});
     }
+
+    @Test(expected = BoardValidationException.class)
+    public void shouldRaiseErrorWhenRollScoreIsEmpty() throws Exception {
+        new BowlingScoreBoard(new String[]{"9", "1", "", "7", "10", "2", "8"});
+    }
+
+//    @Test(expected = BoardValidationException.class)
+//    public void shouldRaiseErrorWhenRollScoreIsNull() throws Exception {
+//        new BowlingScoreBoard(new String[]{"9", "1", "3", null, "7", "10", "2", "8"});
+//    }
 }

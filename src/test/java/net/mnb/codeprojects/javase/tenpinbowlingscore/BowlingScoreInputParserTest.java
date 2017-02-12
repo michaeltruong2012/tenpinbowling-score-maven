@@ -3,6 +3,7 @@ package net.mnb.codeprojects.javase.tenpinbowlingscore;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public class BowlingScoreInputParserTest {
@@ -13,6 +14,15 @@ public class BowlingScoreInputParserTest {
 
         Assert.assertNotNull(result);
         Assert.assertTrue(result.isPresent());
+    }
+
+    @Test
+    public void shouldIgnoreRedundantSpacesInRollScoreText() throws Exception {
+        String[] expectedResult = BowlingScoreInputParser.parseRollScore("1 8 1 8 2 0");
+
+        String[] result = BowlingScoreInputParser.parseRollScore("1 8 1   8 2 0");
+
+        Assert.assertTrue(Arrays.equals(result, expectedResult));
     }
 
     @Test

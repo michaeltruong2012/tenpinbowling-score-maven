@@ -1,5 +1,6 @@
 package net.mnb.codeprojects.javase.tenpinbowlingscore;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -18,6 +19,18 @@ class BowlingScoreInputParser {
             return Optional.empty();
         }
 
-        return Optional.of(new BowlingScoreBoard(args[0].split(" ")));
+        String[] rollScores = parseRollScore(args[0]);
+        return Optional.of(new BowlingScoreBoard(rollScores));
+    }
+
+    static String[] parseRollScore(String arg) {
+        String[] rollScores = arg.split(" ");
+
+        rollScores = Arrays.stream(rollScores)
+                .filter(s -> s != null && !s.isEmpty())
+                .toArray(String[]::new);
+        System.out.println("INFO: The actual input argument is " + Arrays.toString(rollScores));
+
+        return rollScores;
     }
 }

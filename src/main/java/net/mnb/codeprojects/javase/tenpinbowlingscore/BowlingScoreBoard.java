@@ -35,9 +35,9 @@ class BowlingScoreBoard {
             IntStream.range(0, MAX_ROLL_COUNT)
                     .mapToObj(i -> i >= rollScores.length ? "0" : rollScores[i].trim())
                     .map(Integer::parseInt)
-                    .forEach(n -> {
-                        fullRollScores.add(n);
-                        if (isMaxScore(n)) {
+                    .forEach(score -> {
+                        fullRollScores.add(score);
+                        if (isMaxScore(score)) {
                             fullRollScores.add(0);
                         }
                     });
